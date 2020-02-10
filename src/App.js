@@ -1,26 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import socketIOClient from "socket.io-client";
+import ChatBox from "./components/ChatBox";
+import MessageBox from "./components/MessageBox";
+import UserName from "./components/UserName";
 
-function App() {
+const endPoint = "http://localhost:9000";
+
+const App = () => {
+  const socket = socketIOClient(endPoint);
+  const [name, updateName] = React.useState("");
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {!name && <UserName setUserName={n => updateName(n)} />}
+      {name && (
+        <div>
+          <MessageBox socket={socket}/>
+          <ChatBox socket={socket} name={name}/>
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default App;
